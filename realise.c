@@ -1,7 +1,7 @@
 #include "golfile.h"
 
-static Laptop* laptops = NULL;
-static int laptop_count = 0;
+Laptop* laptops = NULL;  
+int laptop_count = 0;   
 
 void init_database() {
     laptops = NULL;
@@ -219,4 +219,14 @@ void userMenu() {
                 } else {
                     for (int i = 0; i < result_count; ++i) {
                         Laptop* l = &results[i];
-                        printf("Model: %s  Price: %.2f
+                        printf("Model: %s  Price: %.2f  Year: %d\n", l->model, l->price, l->year);
+                    }
+                }
+                free(results);
+                break;
+            }
+            case 8:
+                return;
+        }
+    }
+}
