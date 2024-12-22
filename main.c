@@ -1,4 +1,6 @@
 #include "golfile.h"
+extern Laptop* laptops;
+extern int laptop_count;
 
 int main() {
     init_database();
