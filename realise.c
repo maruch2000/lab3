@@ -55,9 +55,12 @@ void add(Laptop laptop) {
     laptops[laptop_count++] = laptop;
 }
 
-Laptop* get_laptops(int* count) {
-    *count = laptop_count;
+Laptop* getLaptops() {
     return laptops;
+}
+
+int getLaptopCount() {
+    return laptop_count;
 }
 
 void freeMem(Laptop* laptops, int count) {
@@ -121,11 +124,11 @@ void userMenu() {
         switch (choice) {
             case 1: {
                 int count;
-                Laptop* lpts = get_laptops(&count);
-                if (count == 0) {
+                Laptop* lpts = getLaptops();
+                if (laptop_count == 0) {
                     printf("No laptops available.\n");
                 } else {
-                    for (int i = 0; i < count; ++i) {
+                    for (int i = 0; i < laptop_count; ++i) {
                         Laptop* l = &lpts[i];
                         printf("Model: %s  Price: %.2f  Year: %d\n", l->model, l->price, l->year);
                     }
@@ -150,12 +153,12 @@ void userMenu() {
             }
             case 3: {
                 int count;
-                Laptop* lpts = get_laptops(&count);
-                if (count == 0) {
+                Laptop* lpts = getLaptops();
+                if (laptop_count == 0) {
                     printf("No laptops to delete.\n");
                 } else {
                     printf("Select index to delete:\n");
-                    for (int i = 0; i < count; ++i) {
+                    for (int i = 0; i < laptop_count; ++i) {
                         Laptop* l = &lpts[i];
                         printf("%d. Model: %s  Price: %.2f  Year: %d\n", i, l->model, l->price, l->year);
                     }
@@ -168,12 +171,12 @@ void userMenu() {
             }
             case 4: {
                 int count;
-                Laptop* lpts = get_laptops(&count);
-                if (count == 0) {
+                Laptop* lpts = getLaptops();
+                if (laptop_count == 0) {
                     printf("No laptops to edit.\n");
                 } else {
                     printf("Select index to edit:\n");
-                    for (int i = 0; i < count; ++i) {
+                    for (int i = 0; i < laptop_count; ++i) {
                         Laptop* l = &lpts[i];
                         printf("%d. Model: %s  Price: %.2f  Year: %d\n", i, l->model, l->price, l->year);
                     }
@@ -216,9 +219,4 @@ void userMenu() {
                 } else {
                     for (int i = 0; i < result_count; ++i) {
                         Laptop* l = &results[i];
-                        printf("Model: %s  Price: %.2f  Year: %d\n", l->model, l->price, l->year);
-                    }
-                }
-                free(results);
-                break;
-            }
+                        printf("Model: %s  Price: %.2f
