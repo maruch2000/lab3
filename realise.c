@@ -10,9 +10,23 @@ void init_database() {
 
 void loadFile(const char* filename) {
     FILE* file = fopen(filename, "rb");
-    if (!file)
-        return;
+    if (!file) {
+        // Если файл не существует, создаем новый пустой файл
+        file = fopen(filename, "wb");
+        if (!file) {
+            printf("Error creating file %s\n", filename);
+            return;
+        }
 
+        
+        int zero = 0;
+        fwrite(&zero, sizeof(int), 1, file);
+        fclose(file);
+        printf("New database created: %s\n", filename);
+        return;
+    }
+
+    
     fread(&laptop_count, sizeof(int), 1, file);
 
     if (laptop_count > 0) {
@@ -33,8 +47,10 @@ void loadFile(const char* filename) {
 
 void saveFile(const char* filename) {
     FILE* file = fopen(filename, "wb");
-    if (!file)
+    if (!file) {
+        printf("Error opening file %s for saving\n", filename);
         return;
+    }
 
     fwrite(&laptop_count, sizeof(int), 1, file);
 
@@ -123,12 +139,12 @@ void userMenu() {
 
         switch (choice) {
             case 1: {
-                int count;
+                int count = getLaptopCount();
                 Laptop* lpts = getLaptops();
-                if (laptop_count == 0) {
+                if (count == 0) {
                     printf("No laptops available.\n");
                 } else {
-                    for (int i = 0; i < laptop_count; ++i) {
+                    for (int i = 0; i < count; ++i) {
                         Laptop* l = &lpts[i];
                         printf("Model: %s  Price: %.2f  Year: %d\n", l->model, l->price, l->year);
                     }
@@ -152,13 +168,13 @@ void userMenu() {
                 break;
             }
             case 3: {
-                int count;
+                int count = getLaptopCount();
                 Laptop* lpts = getLaptops();
-                if (laptop_count == 0) {
+                if (count == 0) {
                     printf("No laptops to delete.\n");
                 } else {
                     printf("Select index to delete:\n");
-                    for (int i = 0; i < laptop_count; ++i) {
+                    for (int i = 0; i < count; ++i) {
                         Laptop* l = &lpts[i];
                         printf("%d. Model: %s  Price: %.2f  Year: %d\n", i, l->model, l->price, l->year);
                     }
@@ -170,13 +186,13 @@ void userMenu() {
                 break;
             }
             case 4: {
-                int count;
+                int count = getLaptopCount();
                 Laptop* lpts = getLaptops();
-                if (laptop_count == 0) {
+                if (count == 0) {
                     printf("No laptops to edit.\n");
                 } else {
                     printf("Select index to edit:\n");
-                    for (int i = 0; i < laptop_count; ++i) {
+                    for (int i = 0; i < count; ++i) {
                         Laptop* l = &lpts[i];
                         printf("%d. Model: %s  Price: %.2f  Year: %d\n", i, l->model, l->price, l->year);
                     }
@@ -223,6 +239,14 @@ void userMenu() {
                     }
                 }
                 free(results);
+                break;
+            }
+            case 6: {
+                saveFile("laptop_database.bin");
+                break;
+            }
+            case 7: {
+                loadFile("laptop_database.bin");
                 break;
             }
             case 8:
